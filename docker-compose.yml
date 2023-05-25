@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+    project:
+        build: .
+        volumes:
+            - ./dprojx:/home/web/pam
+            - /opt/var/media-prod-api:/home/web/pam/media
+            - ./sock:/home/sock
+        ports:
+            - 4443:8822
+        command: /usr/local/bin/gunicorn  --env DJANGO_SETTINGS_MODULE=dprojx.settings dprojx.wsgi --workers 8 --timeout 999 --bind=0.0.0.0:4443 --certfile=/etc/letsencrypt/live/lifeforceenergy.us/fullchain.pem  --keyfile=/etc/letsencrypt/live/lifeforceenergy.us/privkey.pem 
+        entrypoint: /entrypoint.sh
+        restart: always
